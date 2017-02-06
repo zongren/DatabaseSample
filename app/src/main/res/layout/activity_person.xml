@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_person"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context="me.zongren.databasesample.PersonActivity"
+    >
+
+    <EditText
+        android:id="@+id/activity_person_nameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:hint="Please enter name"
+        />
+
+    <EditText
+        android:id="@+id/activity_person_ageEditText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/activity_person_nameEditText"
+        android:layout_marginTop="20dp"
+        android:hint="Please enter age"
+        />
+
+    <Button
+        android:id="@+id/activity_person_cancelButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/activity_person_ageEditText"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/holo_red_light"
+        android:text="Cancel"
+        android:textColor="@android:color/white"
+        />
+
+    <Button
+        android:id="@+id/activity_person_saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/activity_person_cancelButton"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimary"
+        android:text="Save"
+        android:textColor="@android:color/white"
+        />
+</RelativeLayout>
