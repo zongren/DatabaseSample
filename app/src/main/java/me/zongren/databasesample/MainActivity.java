@@ -7,9 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private AlertDialog mDeleteDialog;
     private Button mDeleteButton;
     private int mPressedPosition;
+    private SearchView mSearchView;
+    private MenuItem mSearchItem;
 
     @Override
     public void onClick(View view) {
@@ -42,6 +46,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
+        mSearchItem = menu.findItem(R.id.activity_main_search);
+        mSearchView = (SearchView) mSearchItem.getActionView();
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mSearchItem.collapseActionView();
+                searchPerson(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                searchPerson(query);
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -206,6 +226,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         contentValues.put(PersonEntry.COLUMN_NAME_NAME, name);
         mPersonDatabase.insert(PersonEntry.TABLE_NAME, null, contentValues);
         readDatabase();
+    }
+
+    private void searchPerson(String query) {
+        String[] projection = {PersonEntry._ID, PersonEntry.COLUMN_NAME_NAME, PersonEntry.COLUMN_NAME_AGE};
+        String selection;
+        String[] arguments;
+        if (TextUtils.isEmpty(query)) {
+            selection = " 1 = 1";
+            arguments = new String[]{};
+        } else {
+            selection = PersonEntry.COLUMN_NAME_NAME + " LIKE ?";
+            arguments = new String[]{"%" + query + "%"};
+        }
+        String order = PersonEntry._ID + " ASC";
+        Cursor cursor = mPersonDatabase.query(PersonEntry.TABLE_NAME, projection, selection,
+                arguments, null, null, order);
+        mPersonAdapter.changeCursor(cursor);
+
     }
 
     private void updatePerson(String name, String age) {
